@@ -50,4 +50,34 @@ router.get("/getProjectsByCompanyID", (req, res, next) => {
     });
 });
 
+//Get Project by ID
+router.get("/getProjectByID", (req, res, next) => {
+  project.findById(req.headers.project)
+  .populate("tasks.assigned_to")
+  .then((project) => {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json({ success: true, data: project });
+  });
+});
+
+// ------------- TASKS ------------------
+
+router.post("/createTask", (req, res, next) => {
+  project
+    .findById(req.body.project)
+    .then((project) => {
+      project.tasks.push(req.body);
+      project.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Task added successfully" });
+    })
+    .catch((err) => {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: false, err });
+    });
+});
+
 module.exports = router;

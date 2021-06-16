@@ -49,9 +49,13 @@ const Project = new Schema(
       type: String,
       default: "",
     },
-    start_date: {
+    category: {
       type: String,
       default: "",
+    },
+    start_date: {
+      type: String,
+      default: new Date().toISOString(),
     },
     end_date: {
       type: String,

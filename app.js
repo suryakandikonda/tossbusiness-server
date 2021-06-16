@@ -9,6 +9,7 @@ var usersRouter = require("./routes/users");
 var companyRouter = require("./routes/companies");
 var technologyRouter = require("./routes/technologies");
 var projectRouter = require("./routes/projects");
+var visitRouter = require("./routes/visits");
 
 var cors = require("cors");
 const connectDB = require("./config/db");
@@ -34,6 +35,7 @@ app.use("/users", usersRouter);
 app.use("/company", companyRouter);
 app.use("/technology", technologyRouter);
 app.use("/project", projectRouter);
+app.use("/visit", visitRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

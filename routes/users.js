@@ -227,6 +227,4 @@ router.post("/verification/email", async (req, res) => {
   }
 });
 
-
-
 module.exports = router;
