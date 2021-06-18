@@ -159,7 +159,7 @@ router.post("/employee/add", (req, res, next) => {
         res.setHeader("Content-Type", "application/json");
         res.json({ err: err });
       } else {
-        if (req.body.role_id) user.role_id = req.body.role_id;
+        if (req.body.role) user.role = req.body.role;
         if (req.body.first_name) user.first_name = req.body.first_name;
         if (req.body.last_name) user.last_name = req.body.last_name;
         if (req.body.email) user.email = req.body.email;
@@ -188,8 +188,22 @@ router.post("/employee/add", (req, res, next) => {
             company.save();
             sendEmail(
               req.body.email,
-              `You are invited to join ${company.name}`,
-              `Open ${CLIENT_URL} and click of verify user to set password and get started. <br /> <b>OTP is</b> ${uniqueString} . <br/> Password is: ${req.body.password}`
+              `TOSS - You are invited to join ${company.name}.`,
+              `Hi <b>${req.body.first_name}</b>, <br/>You are invited to join ${
+                company.name
+              } for the ${
+                req.body.role === 3
+                  ? "Admin"
+                  : req.body.role === 4
+                  ? "Tech"
+                  : this.state.role === 5
+                  ? "Finance"
+                  : this.state.role === 6
+                  ? "Inventory"
+                  : "Tech"
+              } role. <br/>Open ${CLIENT_URL} and click on verify user to get started. <br /> <b>OTP is</b> ${uniqueString} . <br/> Password is: ${
+                req.body.password
+              }`
             );
 
             res.statusCode = 200;
