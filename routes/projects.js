@@ -44,7 +44,7 @@ router.get("/getProjectsByCompanyID", (req, res, next) => {
     .find({ company: req.headers.company })
     .populate("team_lead")
     .populate("client")
-    .populate({path: "technologies.technology"})
+    .populate({ path: "technologies.technology" })
     .then((projects) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
@@ -57,6 +57,9 @@ router.get("/getProjectByID", (req, res, next) => {
   project
     .findById(req.headers.project)
     .populate("tasks.assigned_to")
+    .populate("team_lead")
+    .populate("client")
+    .populate("technologies.technology")
     .then((project) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
@@ -73,6 +76,42 @@ router.put("/addTechnology", (req, res, next) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       res.json({ success: true, message: "Technology added to project" });
+    })
+    .catch((err) => {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, err: err });
+    });
+});
+
+// Change Project Status
+router.put("/changeStatus", (req, res, next) => {
+  project
+    .findById(req.headers.project)
+    .then((project) => {
+      project.status = req.body.status;
+      project.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Project Status Updated" });
+    })
+    .catch((err) => {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, err: err });
+    });
+});
+
+// Update Team Lead
+router.put("/updateTeamLead", (req, res, next) => {
+  project
+    .findById(req.headers.project)
+    .then((project) => {
+      project.team_lead = req.body.team_lead;
+      project.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Team Lead Updated" });
     })
     .catch((err) => {
       res.statusCode = 400;

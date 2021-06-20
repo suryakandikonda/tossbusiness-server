@@ -47,18 +47,17 @@ router.get("/get", (req, res, next) => {
 
 // Delete Visit by ID
 router.delete("/delete", (req, res, next) => {
-  visit
-    .findByIdAndRemove(req.headers.visitId)
-    .then((visit) => {
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.json({ success: true, message: "Visit entry deleted" });
-    })
-    .catch((err) => {
+  visit.findByIdAndDelete(req.body.visitId, (err, visit) => {
+    if (err) {
       res.statusCode = 500;
       res.setHeader("Content-Type", "application/json");
       res.json({ success: false, err: err });
-    });
+    } else {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Visit entry deleted" });
+    }
+  });
 });
 
 module.exports = router;
