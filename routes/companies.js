@@ -57,4 +57,36 @@ router.put("/rateCompany", (req, res, next) => {
     });
 });
 
+// Get Companies Listing
+router.get("/all", (req, res, next) => {
+  Company.find({})
+    .then((companies) => {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, data: companies });
+    })
+    .catch((err) => {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ err: err });
+    });
+});
+
+// Dashboard details
+router.get("/dashboard", (req, res, next) => {
+  Company.findById(req.headers.company)
+    .populate("projects")
+    .populate("employees")
+    .then((company) => {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, data: company });
+    })
+    .catch((err) => {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ err: err });
+    });
+});
+
 module.exports = router;

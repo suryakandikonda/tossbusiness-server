@@ -38,6 +38,21 @@ router.post("/createProject", (req, res, next) => {
   });
 });
 
+//Get Projects by Client ID
+router.get("/getProjectsByClientID", (req, res, next) => {
+  project
+    .find({ client: req.headers.client })
+    .populate("team_lead")
+    .populate("client")
+    .populate("company")
+    .populate({ path: "technologies.technology" })
+    .then((projects) => {
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, data: projects });
+    });
+});
+
 //Get Projects by Company ID
 router.get("/getProjectsByCompanyID", (req, res, next) => {
   project
