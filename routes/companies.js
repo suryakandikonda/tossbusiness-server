@@ -38,5 +38,23 @@ router.post("/createProject", (req, res, next) => {
   });
 });
 
+// Give Rating to Company
+router.put("/rateCompany", (req, res, next) => {
+  Company.findById(req.body.company)
+    .then((company) => {
+      company.rating =
+        (company.rating + req.body.rating) / (company.raters + 1);
+      company.raters = company.raters + 1;
+      company.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Company rated successfully" });
+    })
+    .catch((err) => {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ err: err });
+    });
+});
 
 module.exports = router;

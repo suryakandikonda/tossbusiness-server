@@ -71,7 +71,11 @@ const Project = new Schema(
     },
     technologies: [
       {
-        technology: { type: mongoose.Schema.Types.ObjectId, ref: "Technology" },
+        technology: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Technology",
+          unique: true,
+        },
         rating: {
           type: Number,
           default: null,

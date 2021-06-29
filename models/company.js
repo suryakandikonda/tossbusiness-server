@@ -32,6 +32,14 @@ var Company = new Schema(
       type: String,
       default: "",
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    raters: {
+      type: Number,
+      default: 0,
+    },
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
     employees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     progress: {

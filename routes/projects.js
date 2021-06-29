@@ -67,6 +67,32 @@ router.get("/getProjectByID", (req, res, next) => {
     });
 });
 
+// Update Project
+router.put("/updateProject", (req, res, next) => {
+  project
+    .findById(req.headers.project)
+    .then((project) => {
+      if (req.body.name) project.name = req.body.name;
+
+      if (req.body.summary) project.summary = req.body.summary;
+      if (req.body.category) project.category = req.body.category;
+      if (req.body.start_date) project.start_date = req.body.start_date;
+      if (req.body.end_date) project.end_date = req.body.end_date;
+      if (req.body.budget) project.budget = req.body.budget;
+
+      project.save();
+
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Project Updated" });
+    })
+    .catch((err) => {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, err: err });
+    });
+});
+
 router.put("/addTechnology", (req, res, next) => {
   project
     .findById(req.headers.project)
@@ -82,6 +108,51 @@ router.put("/addTechnology", (req, res, next) => {
       res.setHeader("Content-Type", "application/json");
       res.json({ success: true, err: err });
     });
+});
+
+// Remove Technology from Project
+router.delete("/deleteTechnology", (req, res, next) => {
+  project
+    .findById(req.headers.project)
+    .then((project) => {
+      console.log("Came here");
+      project.technologies.pull({ _id: req.body.technologyId });
+      project.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Technology remove from Project" });
+    })
+    .catch((err) => {
+      res.statusCode = 400;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, err: err });
+    });
+});
+
+// Rate Technology of Project
+router.put("/rateTechnology", (req, res, next) => {
+  project.updateOne(
+    {
+      _id: ObjectId(req.body.project),
+      "technologies._id": ObjectId(req.body.technologyId),
+    },
+    {
+      $set: {
+        "technologies.$.rating": req.body.rating,
+      },
+    },
+    function (err, model) {
+      if (err) {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ success: false, err });
+      } else {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({ success: true, message: "Technology rated Successfully" });
+      }
+    }
+  );
 });
 
 // Change Project Status

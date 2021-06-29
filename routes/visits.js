@@ -33,6 +33,7 @@ router.post("/create", (req, res, next) => {
 router.get("/get", (req, res, next) => {
   visit
     .find({ created_by: req.headers.created_by })
+    .sort({ next_followup_date: 1 })
     .then((visits) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
