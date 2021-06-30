@@ -75,7 +75,13 @@ router.get("/all", (req, res, next) => {
 // Dashboard details
 router.get("/dashboard", (req, res, next) => {
   Company.findById(req.headers.company)
-    .populate("projects")
+    // .populate("projects")
+    // .populate({ path: "projects.technologies.technology" })
+    .populate({
+      path: "projects",
+      // Get friends of friends - populate the 'friends' array for every friend
+      populate: { path: "technologies.technology" },
+    })
     .populate("employees")
     .then((company) => {
       res.statusCode = 200;

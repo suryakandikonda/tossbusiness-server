@@ -127,22 +127,31 @@ router.post("/login", (req, res, next) => {
         });
       }
 
-      var token = authenticate.getToken({ _id: req.user._id });
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.json({
-        success: true,
-        status: "Login Successful!",
-        token: token,
-        // role_id: user.role_id,
-        // id: user._id,
-        // username: user.username,
-        // first_name: user.first_name,
-        // last_name: user.last_name,
-        // email: user.email,
-        // mobile_number: user.mobile_number,
-        user: user,
-      });
+      if (!user.is_email_verified) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({
+          success: false,
+          message: "Email not verified",
+        });
+      } else {
+        var token = authenticate.getToken({ _id: req.user._id });
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({
+          success: true,
+          status: "Login Successful!",
+          token: token,
+          // role_id: user.role_id,
+          // id: user._id,
+          // username: user.username,
+          // first_name: user.first_name,
+          // last_name: user.last_name,
+          // email: user.email,
+          // mobile_number: user.mobile_number,
+          user: user,
+        });
+      }
     });
   })(req, res, next);
 });
@@ -227,7 +236,7 @@ router.post("/verification/email", async (req, res) => {
     sendEmail(
       user.email,
       "Your email has been verified - TOSS",
-      "Thank you verifying your email. Now you are enabled complete features"
+      "Thank you verifying your email."
     );
     await user.save();
 
