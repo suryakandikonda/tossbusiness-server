@@ -134,6 +134,13 @@ router.post("/login", (req, res, next) => {
           success: false,
           message: "Email not verified",
         });
+      } else if (user.is_blocked) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({
+          success: false,
+          message: "Blocked",
+        });
       } else {
         var token = authenticate.getToken({ _id: req.user._id });
         res.statusCode = 200;
@@ -210,7 +217,7 @@ router.post("/employee/add", (req, res, next) => {
                   : this.state.role === 6
                   ? "Inventory"
                   : "Tech"
-              } role. <br/>Open ${CLIENT_URL} and click on verify user to get started. <br /> <b>OTP is</b> ${uniqueString} . <br/> Password is: ${
+              } role. <br/>Open ${CLIENT_URL} and click on Email verification to get started. <br /> <b>OTP is</b> ${uniqueString} . <br/> Password is: ${
                 req.body.password
               }`
             );
@@ -223,6 +230,23 @@ router.post("/employee/add", (req, res, next) => {
       }
     }
   );
+});
+
+// Block or UnBlock Employee
+router.put("/employee/blockunblock", (req, res, next) => {
+  User.findById(req.body.employee)
+    .then((employee) => {
+      employee.is_blocked = !employee.is_blocked;
+      employee.save();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ success: true, message: "Action successful" });
+    })
+    .catch((err) => {
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.json({ err: err });
+    });
 });
 
 //Email Verification

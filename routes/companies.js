@@ -60,6 +60,7 @@ router.put("/rateCompany", (req, res, next) => {
 // Get Companies Listing
 router.get("/all", (req, res, next) => {
   Company.find({})
+    .populate("projects")
     .then((companies) => {
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
