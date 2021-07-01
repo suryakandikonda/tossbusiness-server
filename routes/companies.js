@@ -42,8 +42,15 @@ router.post("/createProject", (req, res, next) => {
 router.put("/rateCompany", (req, res, next) => {
   Company.findById(req.body.company)
     .then((company) => {
-      company.rating =
-        (company.rating + req.body.rating) / (company.raters + 1);
+      var initialRating = 0;
+      // console.log(Object.values(company.ratingArray));
+
+      company.ratingArray.forEach((item) => {
+        initialRating += item;
+      });
+      company.ratingArray.push(req.body.rating);
+      company.rating = (initialRating + req.body.rating) / (company.raters + 1);
+      // console.log((initialRating + req.body.rating) / (company.raters + 1));
       company.raters = company.raters + 1;
       company.save();
       res.statusCode = 200;

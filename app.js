@@ -11,6 +11,7 @@ var technologyRouter = require("./routes/technologies");
 var projectRouter = require("./routes/projects");
 var visitRouter = require("./routes/visits");
 const postRouter = require("./routes/posts");
+const inventoryRouter = require("./routes/inventories");
 
 var cors = require("cors");
 const connectDB = require("./config/db");
@@ -38,6 +39,7 @@ app.use("/technology", technologyRouter);
 app.use("/project", projectRouter);
 app.use("/visit", visitRouter);
 app.use("/post", postRouter);
+app.use("/inventory", inventoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

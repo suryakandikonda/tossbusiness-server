@@ -36,6 +36,7 @@ var Company = new Schema(
       type: Number,
       default: 0,
     },
+    ratingArray: [],
     raters: {
       type: Number,
       default: 0,

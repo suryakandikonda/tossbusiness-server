@@ -39,6 +39,11 @@ router.post("/client/signup", (req, res, next) => {
             console.log("Error at second");
             return;
           }
+          sendEmail(
+            req.body.email,
+            `TOSS Email verification`,
+            `Your otp is ${uniqueString}`
+          );
           res.statusCode = 200;
           res.setHeader("Content-Type", "application/json");
           res.json({ success: true, status: "Registration Successful!" });
