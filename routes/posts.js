@@ -70,11 +70,16 @@ router.put("/dislike", (req, res, next) => {
     post
       .findById(req.body.post)
       .then((post) => {
-        post.liked_by.push(req.body.liked_by_id);
+        var liked_by = post.liked_by;
+        var index = liked_by.indexOf(req.body.liked_by_id);
+        if(index > -1) {
+          liked_by.splice(index, 1)
+        }
+        post.liked_by = liked_by;
         post.save();
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json({ success: true, message: "Post Liked" });
+        res.json({ success: true, message: "Post Disliked" });
       })
       .catch((err) => {
         res.statusCode = 500;
