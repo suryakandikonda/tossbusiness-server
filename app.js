@@ -16,6 +16,7 @@ const inventoryRouter = require("./routes/inventories");
 var cors = require("cors");
 const connectDB = require("./config/db");
 const passport = require("passport");
+const { randPassword } = require("./constants/functions");
 connectDB();
 
 var app = express();
